@@ -1,17 +1,41 @@
-if (Meteor.isClient) {
-  // counter starts at 0
-  Session.setDefault('counter', 0);
+Wishes = new Mongo.Collection("wishes");
 
-  Template.hello.helpers({
-    counter: function () {
-      return Session.get('counter');
+if (Meteor.isClient) {
+  // This code only runs on the client
+  Template.body.helpers({
+    wishes: function () {
+      return Wishes.find ({});
     }
   });
 
-  Template.hello.events({
-    'click button': function () {
-      // increment the counter when button is clicked
-      Session.set('counter', Session.get('counter') + 1);
+  Template.body.events({
+    "submit .new-wish": function (event) {
+      // Prevent default browser form submit
+      event.preventDefault();
+ 
+      // Get value from form element
+      var text = event.target.text.value;
+ 
+      // Insert a wish into the collection
+      Wishes.insert({
+        text: text,
+        createdAt: new Date() // current time
+      });
+ 
+      // Clear form
+      event.target.text.value = "";
+    }
+  });
+
+Template.wish.events({
+    "click .toggle-checked": function () {
+      // Set the checked property to the opposite of its current value
+      Wishes.update(this._id, {
+        $set: {checked: ! this.checked}
+      });
+    },
+    "click .delete": function () {
+      Wishes.remove(this._id);
     }
   });
 }
