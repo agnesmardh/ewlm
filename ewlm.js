@@ -17,6 +17,10 @@ if (Meteor.isClient) {
     },
     incompleteCount: function () {
       return Wishes.find({checked: {$ne: true}}).count();
+    },
+    isLoggedinUser: function (name) {
+      //Implement function to check if logged in user is the creator of the wish
+      return true;
     }
   });
 
@@ -31,7 +35,9 @@ if (Meteor.isClient) {
       // Insert a wish into the collection
       Wishes.insert({
         text: text,
-        createdAt: new Date() // current time
+        createdAt: new Date(), // current time
+        owner: Meteor.userId(),
+        username: Meteor.user().username || Meteor.user().profile.name
       });
  
       // Clear form

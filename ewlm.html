@@ -2,7 +2,6 @@
   <title>Enabling wish list</title>
 </head>
 
-
 <body>
   <div class="Container">
     <header>
@@ -14,10 +13,13 @@
       </label>
 
       {{> loginButtons}}
-      
+
+
+      {{#if currentUser}}
        <form class="new-wish">
         <input type="text" name="text" placeholder="Type to add new wishes" />
       </form>
+      {{/if}}
     </header>
 
  	<ul>
@@ -30,10 +32,11 @@
 
 <template name="wish">
   <li class="{{#if checked}}checked{{/if}}">
+    {{#if currentUser}}
     <button class="delete">&times;</button>
- 
+    
     <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
- 
-    <span class="text">{{text}}</span>
+    {{/if}}
+    <span class="text">{{username}} - {{text}}</span>
   </li>
 </template>
